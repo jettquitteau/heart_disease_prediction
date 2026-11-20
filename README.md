@@ -19,7 +19,7 @@ The notebook, `heart-disease-pipeline.ipynb`, covers:
 
 1. Data inspection and basic quality checks.
 2. Exploratory analysis of the target, predictors, and relationships between features.
-3. An 80/20 train-test split using `random_state=42`.
+3. A stratified 80/20 train-test split using `random_state=42` to ensure equal distribution of death events in both sets.
 4. Model training and hyperparameter search for:
    - Random Forest
    - Ridge Classifier
@@ -28,7 +28,18 @@ The notebook, `heart-disease-pipeline.ipynb`, covers:
 5. Evaluation using accuracy, precision, recall, F1, ROC-AUC, confusion matrices, and ROC curves.
 6. Permutation importance for the tuned Random Forest model.
 
-The notebook reports that the models have similar cross-validation ROC-AUC scores (about 0.79). XGBoost has the highest reported F1 and recall, but the differences are within fold-to-fold variability. Ejection fraction and serum creatinine appear important to the Random Forest model in the permutation-importance analysis. These findings are exploratory, especially given the small dataset.
+## Model Performance
+
+Cross-validation results (stratified 5-fold):
+
+| Model | Accuracy | Precision | Recall | F1 | ROC-AUC |
+|-------|----------|-----------|--------|----|----|
+| **SVC** | 0.778 ± 0.025 | 0.634 ± 0.035 | 0.753 ± 0.105 | **0.684 ± 0.040** | **0.819 ± 0.050** |
+| **RF** | 0.765 ± 0.068 | 0.651 ± 0.130 | 0.648 ± 0.104 | 0.641 ± 0.094 | 0.791 ± 0.051 |
+| **Ridge** | 0.753 ± 0.051 | 0.600 ± 0.070 | 0.742 ± 0.106 | 0.659 ± 0.063 | 0.791 ± 0.062 |
+| **XGB** | 0.749 ± 0.049 | 0.610 ± 0.093 | 0.688 ± 0.116 | 0.637 ± 0.064 | 0.753 ± 0.041 |
+
+**SVC** achieves the highest F1 and ROC-AUC scores, with stable performance across folds. All models show reasonable recall (0.65–0.75), suggesting they catch a substantial portion of death events, though with varying precision. The models perform similarly, with differences within fold-to-fold variability. These findings are exploratory, especially given the small dataset.
 
 ## Requirements and running the notebook
 
@@ -42,4 +53,4 @@ Place `heart_failure_clinical_records_dataset.csv` in the project directory, the
 
 ## Limitations
 
-This dataset is small and comes from a specific patient population. Results may vary with different data splits, and performance on this dataset does not establish how the models would perform on other patients or in clinical practice. The notebook’s cross-validation scores are calculated after hyperparameter tuning on the training set, rather than using nested cross-validation, so they may be optimistic.
+This dataset is small and comes from a specific patient population. Results may vary with different data splits, and performance on this dataset does not establish how the models would perform on other patients or in clinical practice. 
